@@ -1,0 +1,21 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block head %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="style.css">
+	<link href="{{ asset('css/main.css') }}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block body %}
+	<h1>
+		Liste des Sprints
+	</h1>
+	{{ form_start(listSprintForm) }}
+	{{ form_widget(listSprintForm) }}
+	<input class="btn btn-primary" type="submit" value="Select">
+	{{ form_end(listSprintForm) }}
+
+	<a class="btn btn-success" href="{{ path ('app_sprint_create', {'projectId' : project.getId})}}">Create Sprint</a>
+
+{% endblock %}

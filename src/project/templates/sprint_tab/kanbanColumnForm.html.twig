@@ -1,0 +1,11 @@
+{% extends "layouts/base.html.twig" %}
+{% block title 'CreateColumn' %}
+{% block body %}
+	<h1>Kanban</h1>
+	{{ form_start(createFormKanban) }}
+	{{ form_widget(createFormKanban) }}
+	<input class="btn btn-primary" type="submit" value="Create/Edit">
+	{{ form_end(createFormKanban) }}
+
+
+{% endblock %}

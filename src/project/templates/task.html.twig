@@ -1,0 +1,17 @@
+{% extends "layouts/base.html.twig" %}
+{% block title 'CreateTask' %}
+{% block body %}
+	<style>
+		* {
+			color: rgb(0, 150, 255);
+
+		}
+	</style>
+	<h1>Task</h1>
+	{{ form_start(createTaskForm) }}
+	{{ form_widget(createTaskForm) }}
+	<input class="btn btn-primary" type="submit" value="Create/Edit" formnovalidate>
+	{{ form_end(createTaskForm) }}
+
+
+{% endblock %}

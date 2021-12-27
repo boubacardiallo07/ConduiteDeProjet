@@ -1,0 +1,26 @@
+<nav>
+	<ul>
+		<li>
+			<a class="btn btn-outline-primary" href="{{ path('app_home') }}">Accueil</a>
+		</li>
+		{% if app.user %}
+			<li>
+				<a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Déconnexion</a>
+			</li>
+			<li>
+				<a class="btn btn-outline-primary" href="{{ path('app_createProject') }}">Créer un nouveau Projet</a>
+			</li>
+			<li>
+				<a class="btn btn-outline-primary" href="{{ path('app_project') }}">Ouvrir un Projet Existant</a>
+			</li>
+		{% else %}
+			<li>
+				<a class="btn btn-outline-primary" href="{{ path('app_login') }}">Se Connecter</a>
+			</li>
+			<li>
+				<a class="btn btn-outline-primary" href="{{ path('app_registrer') }}">S'inscrire</a>
+			</li>
+		{% endif %}
+	</ul>
+
+</nav>

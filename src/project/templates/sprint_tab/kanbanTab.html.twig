@@ -1,0 +1,119 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block head %}
+	<title>Kanban Table</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<style>
+		.card.draggable {
+			margin-bottom: 1rem;
+			cursor: grab;
+		}
+
+		.droppable {
+			background-color: var(--success);
+			min-height: 120px;
+			margin-bottom: 1rem;
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+
+	<style src="{{asset('build/kanbanTab.css')}}"></style>
+
+	{# Ne pas Afficher le modèle des colonnes si kanbanTabs est vide #}
+	{# {% if %} #}
+
+
+	<div class="container-fluid pt-3">
+		<h3 class="font-weight-light text-white">Kanban Board</h3>
+
+		{# ########################################################################## #}
+
+		<div class="row flex-row flex-sm-nowrap py-3">
+			{% for  kanbanColumn in kanbanTabs %}
+				<div class="col-sm-6 col-md-4 col-xl-3" id="{{kanbanColumn.getId()}}">
+					<div class="card bg-light">
+						<div class="card-body">
+
+
+							<h6 class="card-title text-uppercase text-truncate py-2">{{kanbanColumn.getTitle}}
+
+
+								{% if kanbanTabs|length > 0 %}
+									<div class="btn-group" role="group" aria-label="Basic example">
+
+
+										<a class="btn btn-secondary btn-sm" href="{{ path ('app_column_edit', {'projectId': project.getId(), 'sprintId': sprint.getId(), 'columnId' : kanbanColumn.getId() })}}">Modifier</button>
+										<a class="btn btn-danger btn-sm" href="{{ path ('app_deleteColumn', {'projectId': project.getId(), 'sprintId': sprint.getId(), 'columnId' : kanbanColumn.getId() })}}">Supprimer</a>
+									</div>
+
+
+								{% endif %}
+
+
+							</h6>
+							<div class="items border border-light">
+								{% for task in kanbanColumn.getTaskList() %}
+
+									<span class="{{colorArray[task.getColor()]}}">
+										{{task.getColor()}}</span>
+
+
+									<div class="card draggable shadow-sm" id="{{task.getId()}}" draggable="true" ondragstart="drag(event)">
+
+										<div class="card-body p-2">
+											<div class="card-title">
+												<img src="//via.placeholder.com/30" class="rounded-circle float-right">
+												<a href="" class="lead font-weight-light">{{task.getTitle()}}</a>
+											</div>
+											<div class="card-description">
+												{{task.getDescription()}}
+											</div>
+											<div class="btn-group" role="group" aria-label="Basic example">
+												<a class="btn btn-primary btn-sm" href="{{ path ('app_viewTask', {'projectId': project.getId(), 'sprintId': sprint.getId(), 'columnId' : kanbanColumn.getId(), 'taskId': task.getId() })}}">Voir</a>
+
+												<a class="btn btn-primary btn-sm" href="{{ path ('app_editTask', {'projectId': project.getId(), 'sprintId': sprint.getId(), 'columnId' : kanbanColumn.getId(), 'taskId': task.getId() })}}">Editer</a>
+												<a class="btn btn-danger btn-sm" href="{{ path ('app_deleteTask', {'projectId': project.getId(), 'sprintId': sprint.getId(), 'columnId' : kanbanColumn.getId(), 'taskId': task.getId() })}}">Supprimer</a>
+											</div>
+										</div>
+									</div>
+
+									{# <div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)" id="{{kanbanColumn.getId()}}">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															&nbsp;
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														</div> #}
+
+
+								{% endfor %}
+								{# <div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)" id="{{kanbanColumn.getId()}}">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	&nbsp;
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																</div> #}
+
+								<a class="btn btn-success" href="{{ path ('app_createTask', {'projectId': project.getId(), 'sprintId': sprint.getId(), 'columnId' : kanbanColumn.getId() })}}">Créer une tâche</a>
+
+								{# ############################################################################################################# #}
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			{% endfor %}
+
+		</div>
+		<a class="btn btn-success" href="{{ path ('app_column_create', {'projectId': project.getId(), 'sprintId': sprint.getId() })}}">Créer une colonne</a>
+
+	</div>
+
+	{% block javascripts %}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/core.js"></script>
+
+		{# // <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> #}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="{{ asset ('build/kanbanTab.js')}}"></script>
+	{% endblock %}
+{% endblock %}
